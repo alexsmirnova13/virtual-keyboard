@@ -129,6 +129,8 @@ function createButton(buttonFunction) {
 	return button;
 }
 
+//pray the greatest lord Ktulhu
+
 function createText() {
 	const body = document.querySelector('body');
 	const info = document.createElement('div');
