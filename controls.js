@@ -1,40 +1,49 @@
+/* eslint-disable capitalized-comments */
 import {renderButtons} from './script.js';
 import state from './state.js';
 
 export class Button {
-	constructor(textRu, textEng) {
+	constructor(textRu, textEng, code) {
 		this.textEng = textEng;
 		this.textRu = textRu;
+		this.code = code;
+	}
+}
+export class ButtonNumber extends Button {
+	constructor(text, code, sybmolRu, symbolEng) {
+		super(text, text, code);
+		this.sybmolRu = sybmolRu;
+		this.symbolEng = symbolEng;
 	}
 }
 export class ButtonFunction extends Button {
-	constructor(text, func) {
-		super(text, text);
+	constructor(text, code, func) {
+		super(text, text, code);
 		this.func = func;
 	}
 }
 const controls1 = [
-	new Button('ё', '`'),
-	new Button('1', '1'),
-	new Button('2', '2'),
-	new Button('3', '3'),
-	new Button('4', '4'),
-	new Button('5', '5'),
-	new Button('6', '6'),
-	new Button('7', '7'),
-	new Button('8', '8'),
-	new Button('9', '9'),
-	new Button('0', '0'),
-	new Button('-', '-'),
-	new Button('=', '='),
-	new ButtonFunction('backspase', (() => {
+	new Button('ё', '`', 'Backquote'),
+	new ButtonNumber('1', 'Digit1', '!', '!'),
+	new ButtonNumber('2', 'Digit2', '"', '@'),
+	new ButtonNumber('3', 'Digit3', '№', '#'),
+	new ButtonNumber('4', 'Digit4', ';', '$'),
+	new ButtonNumber('5', 'Digit5', '%', '%'),
+	new ButtonNumber('6', 'Digit6', ':', '^'),
+	new ButtonNumber('7', 'Digit7', '?', '&'),
+	new ButtonNumber('8', 'Digit8', '*', '*'),
+	new ButtonNumber('9', 'Digit9', '(', '('),
+	new ButtonNumber('0', 'Digit0', ')', ')'),
+	new ButtonNumber('-', 'Minus', '_', '_'),
+	new ButtonNumber('=', 'Equal', '+', '+'),
+	new ButtonFunction('backspace', 'Backspace', (() => {
 		const input = document.querySelector('.keyboard__screen');
 
 		const ss = input.selectionStart;
 		const se = input.selectionEnd;
 		const ln = input.value.length;
 		const textbefore = input.value.substring(0, ss);
-		const textselected = input.value.substring(ss, se);
+		// const textselected = input.value.substring(ss, se);
 		const textafter = input.value.substring(se, ln);
 
 		if (ss === se) {
@@ -51,70 +60,130 @@ const controls1 = [
 	})),
 ];
 const controls2 = [
-	new ButtonFunction('Tab', (() => {
+	new ButtonFunction('Tab', 'Tab', (() => {
 		const input = document.querySelector('.keyboard__screen');
-		input.value += '    ';
+
+		const ss = input.selectionStart;
+		const se = input.selectionEnd;
+		const ln = input.value.length;
+		const textbefore = input.value.substring(0, ss);
+		// const textselected = input.value.substring(ss, se);
+		const textafter = input.value.substring(se, ln);
+
+		if (ss === se) {
+			input.value = input.value.substring(0, ss) + '\t' + input.value.substring(se, ln);
+			input.focus();
+			input.selectionStart = ss + 1;
+			input.selectionEnd = ss + 1;
+		} else {
+			input.value = textbefore + textafter;
+			input.focus();
+			input.selectionStart = ss;
+			input.selectionEnd = ss;
+		}
 	})),
-	new Button('й', 'q'),
-	new Button('ц', 'w'),
-	new Button('у', 'e'),
-	new Button('к', 'r'),
-	new Button('е', 't'),
-	new Button('н', 'y'),
-	new Button('г', 'u'),
-	new Button('ш', 'i'),
-	new Button('щ', 'o'),
-	new Button('з', 'p'),
-	new Button('х', '['),
-	new Button('ъ', ']'),
-	new Button('\\', '\\'),
+	new Button('й', 'q', 'KeyQ'),
+	new Button('ц', 'w', 'KeyW'),
+	new Button('у', 'e', 'KeyE'),
+	new Button('к', 'r', 'KeyR'),
+	new Button('е', 't', 'KeyT'),
+	new Button('н', 'y', 'KeyY'),
+	new Button('г', 'u', 'KeyU'),
+	new Button('ш', 'i', 'KeyI'),
+	new Button('щ', 'o', 'KeyO'),
+	new Button('з', 'p', 'KeyP'),
+	new Button('х', '[', 'BracketLeft'),
+	new Button('ъ', ']', 'BracketLeft'),
+	new Button('\\', '\\', 'Backslash'),
+	new ButtonFunction('Del', 'Delete', (() => {
+		const input = document.querySelector('.keyboard__screen');
+
+		const ss = input.selectionStart;
+		const se = input.selectionEnd;
+		const ln = input.value.length;
+		const textbefore = input.value.substring(0, ss);
+		// const textselected = input.value.substring(ss, se);
+		const textafter = input.value.substring(se, ln);
+
+		if (ss === se) {
+			input.value = input.value.substring(0, ss) + input.value.substring(se + 1, ln);
+			input.focus();
+			input.selectionStart = ss - 1;
+			input.selectionEnd = ss - 1;
+		} else {
+			input.value = textbefore + textafter;
+			input.focus();
+			input.selectionStart = ss;
+			input.selectionEnd = ss;
+		}
+	})),
 ];
 
 const controls3 = [
-	new ButtonFunction('CapsLk', (() => {
-		if (state.case === 'lower') {
-			state.case = 'upper';
-		} else {
-			state.case = 'lower';
-		}
+	new ButtonFunction('CapsLk', 'CapsLock', (() => {
+		state.capsLock = !state.capsLock;
 
 		renderButtons(controls);
 	})),
-	new Button('ф', 'a'),
-	new Button('ы', 's'),
-	new Button('в', 'd'),
-	new Button('а', 'f'),
-	new Button('п', 'g'),
-	new Button('р', 'h'),
-	new Button('о', 'j'),
-	new Button('л', 'k'),
-	new Button('д', 'l'),
-	new Button('ж', ';'),
-	new Button('э', '\''),
-	new ButtonFunction('Enter', (() => {
+	new Button('ф', 'a', 'KeyA'),
+	new Button('ы', 's', 'KeyS'),
+	new Button('в', 'd', 'KeyD'),
+	new Button('а', 'f', 'KeyF'),
+	new Button('п', 'g', 'KeyG'),
+	new Button('р', 'h', 'KeyH'),
+	new Button('о', 'j', 'KeyJ'),
+	new Button('л', 'k', 'KeyK'),
+	new Button('д', 'l', 'KeyL'),
+	new Button('ж', ';', 'Semicolon'),
+	new Button('э', '\'', 'Quote'),
+	new ButtonFunction('Enter', 'Enter', (() => {
 		const input = document.querySelector('.keyboard__screen');
-		// Console.log('\r\n')
-		input.value += '\n';
+
+		const ss = input.selectionStart;
+		const se = input.selectionEnd;
+		const ln = input.value.length;
+		const textbefore = input.value.substring(0, ss);
+		// const textselected = input.value.substring(ss, se);
+		const textafter = input.value.substring(se, ln);
+
+		if (ss === se) {
+			input.value = input.value.substring(0, ss) + '\n' + input.value.substring(se, ln);
+			input.focus();
+			input.selectionStart = ss + 1;
+			input.selectionEnd = ss + 1;
+		} else {
+			input.value = textbefore + textafter;
+			input.focus();
+			input.selectionStart = ss;
+			input.selectionEnd = ss;
+		}
 	})),
 ];
 
 const controls4 = [
-	new Button('Shift', 'Shift'),
-	new Button('я', 'z'),
-	new Button('ч', 'x'),
-	new Button('с', 'c'),
-	new Button('м', 'v'),
-	new Button('и', 'b'),
-	new Button('т', 'n'),
-	new Button('ь', 'm'),
-	new Button('б', ','),
-	new Button('ю', '.'),
-	new Button('.', '/'),
-	new Button('наверх', 'up'),
+	new ButtonFunction('Shift', 'ShiftLeft', (() => {
+		state.shift = !state.shift;
+		renderButtons(controls);
+	})),
+	new Button('я', 'z', 'KeyZ'),
+	new Button('ч', 'x', 'KeyX'),
+	new Button('с', 'c', 'KeyC'),
+	new Button('м', 'v', 'KeyV'),
+	new Button('и', 'b', 'KeyB'),
+	new Button('т', 'n', 'KeyN'),
+	new Button('ь', 'm', 'KeyM'),
+	new Button('б', ',', 'Comma'),
+	new Button('ю', '.', 'Period'),
+	new Button('.', '/', 'Slash'),
+	new Button('\u2191', '\u2191', 'ArrowUp'),
+	new ButtonFunction('Shift', 'ShiftRight', (() => {
+		state.shift = !state.shift;
+		renderButtons(controls);
+	})),
 ];
 
 const controls5 = [
-	new ButtonFunction('ru/eng', (() => {
+	new ButtonFunction('ru/eng', '', (() => {
 		if (state.language === 'Ru') {
 			state.language = 'Eng';
 		} else {
@@ -124,18 +193,47 @@ const controls5 = [
 		localStorage.setItem('language', state.language);
 		renderButtons(controls);
 	})),
-	new Button('Ctrl', 'Ctrl'),
-	new Button('win', 'win'),
-	new Button('Alt', 'Alt'),
-	new ButtonFunction('Space', (() => {
-		const input = document.querySelector('.keyboard__screen');
-		input.value += ' ';
+	new ButtonFunction('Ctrl', 'ControlLeft', (() => {
+		state.ctrl = !state.ctrl;
 	})),
-	new Button('Alt', 'v'),
-	new Button('<', '<'),
-	new Button('вниз', 'вниз'),
-	new Button('>', '>'),
-	new Button('Ctrl', 'Ctrl'),
+	new ButtonFunction('win', 'OSLeft', (() => {
+		state.win = !state.win;
+	})),
+	new ButtonFunction('Alt', 'AltLeft', (() => {
+		state.alt = !state.alt;
+	})),
+	new ButtonFunction('Space', 'Space', (() => {
+		const input = document.querySelector('.keyboard__screen');
+
+		const ss = input.selectionStart;
+		const se = input.selectionEnd;
+		const ln = input.value.length;
+		const textbefore = input.value.substring(0, ss);
+		// const textselected = input.value.substring(ss, se);
+		const textafter = input.value.substring(se, ln);
+
+		if (ss === se) {
+			input.value = input.value.substring(0, ss) + ' ' + input.value.substring(se, ln);
+			input.focus();
+			input.selectionStart = ss + 1;
+			input.selectionEnd = ss + 1;
+		} else {
+			input.value = textbefore + textafter;
+			input.focus();
+			input.selectionStart = ss;
+			input.selectionEnd = ss;
+		}
+	})),
+	new ButtonFunction('Alt', 'AltRight', (() => {
+		state.alt = !state.alt;
+	})),
+
+	new ButtonFunction('Ctrl', 'ControlRight', (() => {
+		state.ctrl = !state.ctrl;
+	})),
+	new Button('\u2190', '\u2190', 'ArrowLeft'),
+	new Button('\u2193', '\u2193', 'ArrowDown'),
+	new Button('\u2192', '\u2192', 'ArrowRight'),
 ];
 const controls = [
 	controls1,

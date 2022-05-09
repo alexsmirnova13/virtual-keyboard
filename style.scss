@@ -1,25 +1,77 @@
 .keyboard {
+    margin: auto;
     width: 800px;
-    height: 400px;
-    background-color: aqua;
+    height: 500px;
+    margin-top: 20px;
     &__controls {
-        // width: 100%;
-        background-color: green;
-        // display: flex;
-        // flex-direction: row;
         justify-content: space-around;
         text-align: center;
     }
     &__screen{
-        width: 100%;
-        height: 200px
+        width: 780px;
+        height: 200px;
+        border-radius: 20px;
+        padding: 10px;
+        font-size: 18px;
+        color: #444444;
+
     }
     &__button {
         min-width: 52px;
         height: 52px;
+        
     }
 }
 
-// .button {
+.title {
+    display: block;
+    width: 500px;
+  
+    // background-color: aqua;
+    margin:auto;
+    margin-top: 100px;
+}
+.info {
+    // background-color: green;
+    width: 400px;
+    height: 100px;
+    align-items: center;
+    margin: auto;
 
-// }
+}
+.button {
+    border-radius: 20px;
+}
+.button:hover {
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.button:active{
+    background-color: gray !important;
+}
+
+.active {
+    background-color: gray !important;
+}
+.key-Space {
+    width: 200px;
+}
+
+.key-ShiftRight {
+    width:100px;
+}
+.key-ShiftLeft {
+    width:100px;
+}
+
+.key-Enter {
+    width:100px;
+}
+
+.key-CapsLock {
+    width:100px;
+}
+.key-Backspace {
+    width:100px;
+}
