@@ -174,8 +174,8 @@ document.addEventListener('keydown', e => {
 	const {code} = e;
 	const button = document.querySelector(`.key-${code}`);
 	const input = document.querySelector('.keyboard__screen');
-	if (!(e.key === button.innerText)) {
-		if (button.innerText.length === 1) {
+	if (!(e.key === button?.innerText)) {
+		if (button?.innerText.length === 1) {
 			e.preventDefault();
 			const ss = input.selectionStart;
 			const se = input.selectionEnd;
@@ -223,6 +223,11 @@ document.addEventListener('keydown', e => {
 
 	if (e.code === 'ControlLeft') {
 		state.ctrl = true;
+	}
+
+	if (e.code==='CapsLock') {
+		state.capsLock=!state.capsLock;
+		renderButtons(controls);
 	}
 });
 
