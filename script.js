@@ -2,7 +2,6 @@
 
 import controls, {Button, ButtonFunction, ButtonNumber} from './controls.js';
 import state from './state.js';
-// Const language = 'Ru';
 
 function createKeyboard() {
 	const body = document.querySelector('body');
@@ -17,10 +16,12 @@ function createKeyboard() {
 	keyboard.append(controls);
 }
 
+// eslint-disable-next-line complexity
 function createButton(buttonFunction) {
 	const button = document.createElement('button');
 	const input = document.querySelector('.keyboard__screen');
 	button.classList = `button keyboard__button key-${buttonFunction.code}`;
+
 	if (!(buttonFunction instanceof ButtonFunction) && !(buttonFunction instanceof ButtonNumber)) {
 		const isUpperCase = Boolean((Number(state.capsLock) + Number(state.shift)) % 2);
 		if (state.language === 'Ru') {
@@ -52,17 +53,40 @@ function createButton(buttonFunction) {
 		}
 	}
 
+	if ((buttonFunction.code === 'AltLeft' || buttonFunction.code === 'AltRight') && state.alt === true) {
+		button.classList.add('pushed');
+	}
+
+	if ((buttonFunction.code === 'ControlLeft' || buttonFunction.code === 'ControlRight') && state.ctrl === true) {
+		button.classList.add('pushed');
+	}
+
+	if ((buttonFunction.code === 'ShiftLeft' || buttonFunction.code === 'ShiftRight') && state.shift === true) {
+		button.classList.add('pushed');
+	}
+
+	if (buttonFunction.code === 'CapsLock' && state.capsLock === true) {
+		button.classList.add('pushed');
+	}
+
 	if (buttonFunction instanceof ButtonFunction) {
 		button.addEventListener('click', buttonFunction.func);
+		if (state.ctrl) {
+			if (state.alt) {
+				if (state.language === 'Ru') {
+					state.language = 'Eng';
+				} else {
+					state.language = 'Ru';
+				}
+			}
+		}
 	} else if (buttonFunction instanceof Button) {
 		button.addEventListener('click', () => {
 			const ss = input.selectionStart;
 			const se = input.selectionEnd;
 			const ln = input.value.length;
 			const textbefore = input.value.substring(0, ss);
-			// const textselected = input.value.substring(ss, se);
 			const textafter = input.value.substring(se, ln);
-
 			if (ss === se) {
 				input.value = input.value.substring(0, ss) + button.innerText + input.value.substring(se, ln);
 				input.focus();
@@ -84,6 +108,7 @@ function createButton(buttonFunction) {
 			input.focus();
 		});
 	}
+	// console.log(buttonFunction)
 
 	return button;
 }
@@ -128,6 +153,34 @@ export function renderButtons(controls) {
 }
 
 document.addEventListener('keydown', e => {
+	// console.log(e)
+
+	const {code} = e;
+	const button = document.querySelector(`.key-${code}`);
+	const input = document.querySelector('.keyboard__screen');
+	if (!(e.key === button.innerText)) {
+		e.preventDefault();
+		const ss = input.selectionStart;
+		const se = input.selectionEnd;
+		const ln = input.value.length;
+		const textbefore = input.value.substring(0, ss);
+		// const textselected = input.value.substring(ss, se);
+		const textafter = input.value.substring(se, ln);
+		if (ss === se) {
+			input.value = input.value.substring(0, ss) + button.innerText + input.value.substring(se, ln);
+			input.focus();
+			input.selectionStart = ss + 1;
+			input.selectionEnd = ss + 1;
+		} else {
+			input.value = textbefore + button.innerText + textafter;
+			input.focus();
+			input.selectionStart = ss;
+			input.selectionEnd = ss;
+		}
+	}
+});
+
+document.addEventListener('keydown', e => {
 	const {code} = e;
 	const keySelector = `.key-${code}`;
 	const button = document.querySelector(keySelector);
@@ -144,8 +197,32 @@ document.addEventListener('keyup', e => {
 		button.classList.remove('active');
 	}
 });
+
+document.addEventListener('keydown', e => {
+	if (e.code === 'AltLeft') {
+		state.alt = true;
+	}
+
+	if (e.code === 'ControlLeft') {
+		state.ctrl = true;
+	}
+});
+
+document.addEventListener('keyup', e => {
+	if (state.alt && state.ctrl) {
+		state.language = state.language === 'Ru' ? 'Eng' : 'Ru';
+		renderButtons(controls);
+	}
+
+	if (e.code === 'AltLeft') {
+		state.alt = false;
+	}
+
+	if (e.code === 'ControlLeft') {
+		state.ctrl = false;
+	}
+});
+
 renderButtons(controls);
 
-// сочетание клавиш для переключения языка альт шифт
-// капс и замена языка как на компе
-
+// активные шифт, альт, контрл

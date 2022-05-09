@@ -43,6 +43,7 @@
 
 .button {
   border-radius: 20px;
+  font-size: 18px;
 }
 
 .button:hover {
@@ -56,6 +57,10 @@
 
 .active {
   background-color: gray !important;
+}
+
+.pushed {
+  background-color: teal !important;
 }
 
 .key-Space {

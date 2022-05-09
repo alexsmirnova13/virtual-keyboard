@@ -36,7 +36,7 @@ const controls1 = [
 	new ButtonNumber('0', 'Digit0', ')', ')'),
 	new ButtonNumber('-', 'Minus', '_', '_'),
 	new ButtonNumber('=', 'Equal', '+', '+'),
-	new ButtonFunction('backspace', 'Backspace', (() => {
+	new ButtonFunction('Backspace', 'Backspace', (() => {
 		const input = document.querySelector('.keyboard__screen');
 
 		const ss = input.selectionStart;
@@ -120,7 +120,7 @@ const controls2 = [
 ];
 
 const controls3 = [
-	new ButtonFunction('CapsLk', 'CapsLock', (() => {
+	new ButtonFunction('CapsLock', 'CapsLock', (() => {
 		state.capsLock = !state.capsLock;
 
 		renderButtons(controls);
@@ -195,12 +195,36 @@ const controls5 = [
 	})),
 	new ButtonFunction('Ctrl', 'ControlLeft', (() => {
 		state.ctrl = !state.ctrl;
+		if (state.alt) {
+			if (state.language === 'Ru') {
+				state.language = 'Eng';
+			} else {
+				state.language = 'Ru';
+			}
+
+			state.alt = !state.alt;
+			state.ctrl = !state.ctrl;
+		}
+
+		renderButtons(controls);
 	})),
 	new ButtonFunction('win', 'OSLeft', (() => {
 		state.win = !state.win;
 	})),
 	new ButtonFunction('Alt', 'AltLeft', (() => {
 		state.alt = !state.alt;
+		if (state.ctrl) {
+			if (state.language === 'Ru') {
+				state.language = 'Eng';
+			} else {
+				state.language = 'Ru';
+			}
+
+			state.alt = !state.alt;
+			state.ctrl = !state.ctrl;
+		}
+
+		renderButtons(controls);
 	})),
 	new ButtonFunction('Space', 'Space', (() => {
 		const input = document.querySelector('.keyboard__screen');
