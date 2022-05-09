@@ -1,6 +1,8 @@
+/* eslint-disable no-lonely-if */
+/* eslint-disable no-negated-condition */
 /* eslint-disable capitalized-comments */
 
-import controls, {Button, ButtonFunction, ButtonNumber} from './controls.js';
+import controls, {Button, ButtonFunction, ButtonNumber, Punctuation} from './controls.js';
 import state from './state.js';
 
 function createKeyboard() {
@@ -22,7 +24,7 @@ function createButton(buttonFunction) {
 	const input = document.querySelector('.keyboard__screen');
 	button.classList = `button keyboard__button key-${buttonFunction.code}`;
 
-	if (!(buttonFunction instanceof ButtonFunction) && !(buttonFunction instanceof ButtonNumber)) {
+	if (!(buttonFunction instanceof ButtonFunction) && !(buttonFunction instanceof ButtonNumber) && !(buttonFunction instanceof Punctuation)) {
 		const isUpperCase = Boolean((Number(state.capsLock) + Number(state.shift)) % 2);
 		if (state.language === 'Ru') {
 			if (isUpperCase) {
@@ -37,9 +39,9 @@ function createButton(buttonFunction) {
 				button.innerText = buttonFunction.textEng;
 			}
 		}
-	} else if ((buttonFunction instanceof ButtonFunction) && !(buttonFunction instanceof ButtonNumber)) {
+	} else if ((buttonFunction instanceof ButtonFunction) && !(buttonFunction instanceof ButtonNumber) && !(buttonFunction instanceof Punctuation)) {
 		button.innerText = buttonFunction.textRu;
-	} else if (!(buttonFunction instanceof ButtonFunction) && (buttonFunction instanceof ButtonNumber)) {
+	} else if (!(buttonFunction instanceof ButtonFunction) && (buttonFunction instanceof ButtonNumber) && !(buttonFunction instanceof Punctuation)) {
 		if (state.shift) {
 			if (state.language === 'Ru') {
 				button.innerText = buttonFunction.sybmolRu;
@@ -51,13 +53,27 @@ function createButton(buttonFunction) {
 		} else {
 			button.innerText = buttonFunction.textEng;
 		}
+	} else if (buttonFunction instanceof Punctuation) {
+		if (state.language === 'Ru') {
+			if (!(state.shift)) {
+				button.innerText = buttonFunction.symbolRu;
+			} else {
+				button.innerText = buttonFunction.symbolRuShift;
+			}
+		} else {
+			if (!(state.shift)) {
+				button.innerText = buttonFunction.symbolEng;
+			} else {
+				button.innerText = buttonFunction.symbolEngShift;
+			}
+		}
 	}
 
-	if ((buttonFunction.code === 'AltLeft' || buttonFunction.code === 'AltRight') && state.alt === true) {
+	if ((buttonFunction.code === 'AltLeft') && state.alt === true) {
 		button.classList.add('pushed');
 	}
 
-	if ((buttonFunction.code === 'ControlLeft' || buttonFunction.code === 'ControlRight') && state.ctrl === true) {
+	if ((buttonFunction.code === 'ControlLeft') && state.ctrl === true) {
 		button.classList.add('pushed');
 	}
 
@@ -153,29 +169,29 @@ export function renderButtons(controls) {
 }
 
 document.addEventListener('keydown', e => {
-	// console.log(e)
-
 	const {code} = e;
 	const button = document.querySelector(`.key-${code}`);
 	const input = document.querySelector('.keyboard__screen');
 	if (!(e.key === button.innerText)) {
-		e.preventDefault();
-		const ss = input.selectionStart;
-		const se = input.selectionEnd;
-		const ln = input.value.length;
-		const textbefore = input.value.substring(0, ss);
-		// const textselected = input.value.substring(ss, se);
-		const textafter = input.value.substring(se, ln);
-		if (ss === se) {
-			input.value = input.value.substring(0, ss) + button.innerText + input.value.substring(se, ln);
-			input.focus();
-			input.selectionStart = ss + 1;
-			input.selectionEnd = ss + 1;
-		} else {
-			input.value = textbefore + button.innerText + textafter;
-			input.focus();
-			input.selectionStart = ss;
-			input.selectionEnd = ss;
+		if (button.innerText.length === 1) {
+			e.preventDefault();
+			const ss = input.selectionStart;
+			const se = input.selectionEnd;
+			const ln = input.value.length;
+			const textbefore = input.value.substring(0, ss);
+			const textafter = input.value.substring(se, ln);
+
+			if (ss === se) {
+				input.value = input.value.substring(0, ss) + button.innerText + input.value.substring(se, ln);
+				input.focus();
+				input.selectionStart = ss + 1;
+				input.selectionEnd = ss + 1;
+			} else {
+				input.value = textbefore + button.innerText + textafter;
+				input.focus();
+				input.selectionStart = ss;
+				input.selectionEnd = ss;
+			}
 		}
 	}
 });
@@ -209,17 +225,35 @@ document.addEventListener('keydown', e => {
 });
 
 document.addEventListener('keyup', e => {
+	const button = document.querySelector(`.key-${e.code}`);
 	if (state.alt && state.ctrl) {
 		state.language = state.language === 'Ru' ? 'Eng' : 'Ru';
-		renderButtons(controls);
 	}
 
 	if (e.code === 'AltLeft') {
 		state.alt = false;
+		button.classList.remove('pushed');
 	}
 
 	if (e.code === 'ControlLeft') {
 		state.ctrl = false;
+		button.classList.remove('pushed');
+	}
+
+	renderButtons(controls);
+});
+
+document.addEventListener('keydown', e => {
+	if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
+		state.shift = true;
+		renderButtons(controls);
+	}
+});
+
+document.addEventListener('keyup', e => {
+	if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
+		state.shift = false;
+		renderButtons(controls);
 	}
 });
 

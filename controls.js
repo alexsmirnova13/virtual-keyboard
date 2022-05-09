@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 /* eslint-disable capitalized-comments */
 import {renderButtons} from './script.js';
 import state from './state.js';
@@ -6,6 +7,15 @@ export class Button {
 	constructor(textRu, textEng, code) {
 		this.textEng = textEng;
 		this.textRu = textRu;
+		this.code = code;
+	}
+}
+export class Punctuation {
+	constructor(symbolRu, symbolRuShift, symbolEng, symbolEngShift, code) {
+		this.symbolRu = symbolRu;
+		this.symbolEng = symbolEng;
+		this.symbolEngShift = symbolEngShift;
+		this.symbolRuShift = symbolRuShift;
 		this.code = code;
 	}
 }
@@ -23,7 +33,7 @@ export class ButtonFunction extends Button {
 	}
 }
 const controls1 = [
-	new Button('ё', '`', 'Backquote'),
+	new Punctuation('ё', 'Ё', '`', '~', 'Backquote'),
 	new ButtonNumber('1', 'Digit1', '!', '!'),
 	new ButtonNumber('2', 'Digit2', '"', '@'),
 	new ButtonNumber('3', 'Digit3', '№', '#'),
@@ -94,8 +104,8 @@ const controls2 = [
 	new Button('з', 'p', 'KeyP'),
 	new Button('х', '[', 'BracketLeft'),
 	new Button('ъ', ']', 'BracketLeft'),
-	new Button('\\', '\\', 'Backslash'),
-	new ButtonFunction('Del', 'Delete', (() => {
+	new Punctuation('\\', '/', '\\', '|', 'Backslash'),
+	new ButtonFunction('Delete', 'Delete', (() => {
 		const input = document.querySelector('.keyboard__screen');
 
 		const ss = input.selectionStart;
@@ -134,8 +144,8 @@ const controls3 = [
 	new Button('о', 'j', 'KeyJ'),
 	new Button('л', 'k', 'KeyK'),
 	new Button('д', 'l', 'KeyL'),
-	new Button('ж', ';', 'Semicolon'),
-	new Button('э', '\'', 'Quote'),
+	new Punctuation('ж', 'Ж', ';', ':', 'Semicolon'),
+	new Punctuation('э', 'Э', '\'', '"', 'Quote'),
 	new ButtonFunction('Enter', 'Enter', (() => {
 		const input = document.querySelector('.keyboard__screen');
 
@@ -172,9 +182,9 @@ const controls4 = [
 	new Button('и', 'b', 'KeyB'),
 	new Button('т', 'n', 'KeyN'),
 	new Button('ь', 'm', 'KeyM'),
-	new Button('б', ',', 'Comma'),
-	new Button('ю', '.', 'Period'),
-	new Button('.', '/', 'Slash'),
+	new Punctuation('б', 'Б', ',', '<', 'Comma'),
+	new Punctuation('ю', 'Ю', '.', '?', 'Period'),
+	new Punctuation('.', ',', '/', '?', 'Slash'),
 	new Button('\u2191', '\u2191', 'ArrowUp'),
 	new ButtonFunction('Shift', 'ShiftRight', (() => {
 		state.shift = !state.shift;
@@ -208,7 +218,7 @@ const controls5 = [
 
 		renderButtons(controls);
 	})),
-	new ButtonFunction('win', 'OSLeft', (() => {
+	new ButtonFunction('Meta', 'MetaLeft', (() => {
 		state.win = !state.win;
 	})),
 	new ButtonFunction('Alt', 'AltLeft', (() => {
