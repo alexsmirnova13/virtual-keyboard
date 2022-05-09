@@ -96,8 +96,9 @@ function createButton(buttonFunction) {
 				}
 			}
 		}
-	} else if (buttonFunction instanceof Button) {
+	} else if (buttonFunction instanceof Button || buttonFunction instanceof Punctuation) {
 		button.addEventListener('click', () => {
+			console.log('WIFHWIFHWF');
 			const ss = input.selectionStart;
 			const se = input.selectionEnd;
 			const ln = input.value.length;
@@ -129,7 +130,7 @@ function createButton(buttonFunction) {
 	return button;
 }
 
-//pray the greatest lord Ktulhu
+// pray the greatest lord Ktulhu
 
 function createText() {
 	const body = document.querySelector('body');
@@ -225,8 +226,8 @@ document.addEventListener('keydown', e => {
 		state.ctrl = true;
 	}
 
-	if (e.code==='CapsLock') {
-		state.capsLock=!state.capsLock;
+	if (e.code === 'CapsLock') {
+		state.capsLock = !state.capsLock;
 		renderButtons(controls);
 	}
 });
@@ -252,6 +253,10 @@ document.addEventListener('keyup', e => {
 
 document.addEventListener('keydown', e => {
 	if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
+		if (state.shift) {
+			return;
+		}
+
 		state.shift = true;
 		renderButtons(controls);
 	}
@@ -259,6 +264,10 @@ document.addEventListener('keydown', e => {
 
 document.addEventListener('keyup', e => {
 	if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
+		if (!state.shift) {
+			return;
+		}
+
 		state.shift = false;
 		renderButtons(controls);
 	}
