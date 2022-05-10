@@ -53,6 +53,9 @@
 
 .button:active {
   background-color: gray !important;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 100%;
 }
 
 .active {
