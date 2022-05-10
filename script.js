@@ -98,7 +98,6 @@ function createButton(buttonFunction) {
 		}
 	} else if (buttonFunction instanceof Button || buttonFunction instanceof Punctuation) {
 		button.addEventListener('click', () => {
-			console.log('WIFHWIFHWF');
 			const ss = input.selectionStart;
 			const se = input.selectionEnd;
 			const ln = input.value.length;
@@ -124,6 +123,14 @@ function createButton(buttonFunction) {
 
 			input.focus();
 		});
+	}
+
+	if (state.capsLock) {
+		if (state.language === 'Ru') {
+			if (buttonFunction.code === 'Backquote') {
+				button.innerText = buttonFunction.symbolRuShift;
+			}
+		}
 	}
 	// console.log(buttonFunction)
 
@@ -270,6 +277,30 @@ document.addEventListener('keyup', e => {
 
 		state.shift = false;
 		renderButtons(controls);
+	}
+});
+
+document.addEventListener('keydown', e => {
+	if (e.code === 'Tab') {
+		const input = document.querySelector('.keyboard__screen');
+
+		const ss = input.selectionStart;
+		const se = input.selectionEnd;
+		const ln = input.value.length;
+		const textbefore = input.value.substring(0, ss);
+		const textafter = input.value.substring(se, ln);
+
+		if (ss === se) {
+			input.value = input.value.substring(0, ss) + '\t' + input.value.substring(se, ln);
+			input.focus();
+			input.selectionStart = ss + 1;
+			input.selectionEnd = ss + 1;
+		} else {
+			input.value = textbefore + textafter;
+			input.focus();
+			input.selectionStart = ss;
+			input.selectionEnd = ss;
+		}
 	}
 });
 

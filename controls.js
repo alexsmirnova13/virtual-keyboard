@@ -118,8 +118,8 @@ const controls2 = [
 		if (ss === se) {
 			input.value = input.value.substring(0, ss) + input.value.substring(se + 1, ln);
 			input.focus();
-			input.selectionStart = ss - 1;
-			input.selectionEnd = ss - 1;
+			input.selectionStart = ss;
+			input.selectionEnd = ss;
 		} else {
 			input.value = textbefore + textafter;
 			input.focus();
