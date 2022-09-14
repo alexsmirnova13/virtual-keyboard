@@ -1,5 +1,5 @@
 {
-  "homepage": "https://nameaccount.github.io/virtual-keyboard/src",
+  "homepage": "https://alexsmirnova13.github.io/virtual-keyboard/",
   "name": "virtualkeyboard",
   "version": "1.0.0",
   "description": "",
@@ -13,9 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.15.0",
-    "eslint-config-xo": "^0.40.0"
-  },
-  "dependencies": {
+    "eslint-config-xo": "^0.40.0",
     "gh-pages": "^4.0.0"
   }
 }
