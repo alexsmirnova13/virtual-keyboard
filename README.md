@@ -12,5 +12,5 @@
   **Score:** 110/110 
   ------------
 
-  **Deploy:** https://alexsmirnova13.github.io/virtual-keyboard/src/
+  **Deploy:** https://alexsmirnova13.github.io/virtual-keyboard/
   ------------
