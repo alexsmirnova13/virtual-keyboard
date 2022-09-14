@@ -1,0 +1,19 @@
+{
+  "homepage": "https://alexsmirnova13.github.io/virtual-keyboard/",
+  "name": "virtualkeyboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-xo": "^0.40.0",
+    "gh-pages": "^4.0.0"
+  }
+}
